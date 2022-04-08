@@ -10,3 +10,6 @@ needs to reach the form:<br/>
 1 2 3<br/>
 4 5 6<br/>
 7 8 0<br/>
+
+* Solution
+This C implementation uses A* search to solve this problem using as heuristic the sum of the manhattan distance of all non-empty pieces from the blocks to their estimated goal positions.
