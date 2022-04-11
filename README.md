@@ -24,6 +24,6 @@ This C implementation uses A* search to solve this problem using as heuristic th
 4. The coordinates of the empty piece (for instant access when swapping pieces)<br/>
 
 * **How the search works** <br/>
-* At first, we find the heuristic calculation of the first given puzzle (using the manhattan distance of each piece). <br/>
-* When generatiing  the possible puzzles of a certain puzzle, we first check if the move that caused the puzzle to come to its currect form is the reverse action of the move we are trying to apply. For example, if a puzzle came from moving down the empty piece (or moving up a numerated piece), moving the empty piece up will cause the generation of the puzzle before moving down the empty piece. So, we ignore it. <br/>
-* If the generation of the puzzle is successful, we fix the heuristic calculation of the new puzzle by adding the manhattan distance of the old empty, now occupied, piece and removing the manhattan distance of the now empty piece (once occupied by the old puzzle) to the manhattan distance of the old puzzle.
+-At first, we find the heuristic calculation of the first given puzzle (using the manhattan distance of each piece). <br/>
+-When generatiing  the possible puzzles of a certain puzzle, we first check if the move that caused the puzzle to come to its currect form is the reverse action of the move we are trying to apply. For example, if a puzzle came from moving down the empty piece (or moving up a numerated piece), moving the empty piece up will cause the generation of the puzzle before moving down the empty piece. So, we ignore it. <br/>
+-If the generation of the puzzle is successful, we fix the heuristic calculation of the new puzzle by adding the manhattan distance of the old empty, now occupied, piece and removing the manhattan distance of the now empty piece (once occupied by the old puzzle) to the manhattan distance of the old puzzle.
