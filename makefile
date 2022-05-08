@@ -16,19 +16,19 @@ npuzzle: $(OBJ)
 
 # make the object files needed
 main.o: $(SRC_DIR)/main.c
-	gcc -c $(SRC_DIR)/main.c
+	$(CC) -c $(SRC_DIR)/main.c
 
 utilities.o: $(SRC_DIR)/utilities.c
-	gcc -c $(SRC_DIR)/utilities.c
+	$(CC) -c $(SRC_DIR)/utilities.c
 
 SolvePuzzle.o: $(SRC_DIR)/SolvePuzzle.c
-	gcc -c $(SRC_DIR)/SolvePuzzle.c
+	$(CC) -c $(SRC_DIR)/SolvePuzzle.c
 
 PriorityQueue.o: $(MOD_DIR)/PriorityQueue.c
-	gcc -c $(MOD_DIR)/PriorityQueue.c
+	$(CC) -c $(MOD_DIR)/PriorityQueue.c
 
 stack.o: $(MOD_DIR)/stack.c
-	gcc -c $(MOD_DIR)/stack.c
+	$(CC) -c $(MOD_DIR)/stack.c
 
 # delete excess object files
 clear:
