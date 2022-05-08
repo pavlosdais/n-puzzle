@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "SolvePuzzle.h"
+#include "../include/SolvePuzzle.h"
 
 typedef struct PriorityQueueNode
 {

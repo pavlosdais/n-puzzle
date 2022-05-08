@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include "item.h"
-#include "utilities.h"
-#include "PriorityQueue.h"
-#include "stack.h"
+#include "../include/item.h"
+#include "../include/utilities.h"
+#include "../include/PriorityQueue.h"
+#include "../include/stack.h"
 
 #define ABS(A, B) ((A > B)? (A-B): (B-A))
 
