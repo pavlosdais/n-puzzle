@@ -5,6 +5,7 @@ Play the game [here](https://www.artbylogic.com/puzzles/numSlider/numberShuffle.
 * **Gameplay**<br/>
 The [n-puzzle](https://en.wikipedia.org/wiki/15_puzzle) (most popularly known for the 8-puzzle problem or 15-puzzle problem) problem is a problem where we have at our disposal a k x k board with k*k-1(=n) numerated tiles and an empty spot. A tile adjacent to the empty piece can be moved to this position. The acceptable moves are up, down, left, right. The goal is, starting from a given board to reach a given board where all the titles starting from the top left are sorted in ascending order. <br/>
 For example, the puzzle <br/>
+<table>
 <tr>
 <td>8</td> <td> </td> <td>6</td>
 </tr>
@@ -14,8 +15,9 @@ For example, the puzzle <br/>
 <tr>
   <td>2</td> <td>3</td> <td>1</td>
 </tr>
-
+</table>
 needs to reach the form:<br/>
+<table>
 <tr>
 <td> </td>1<td>2</td> <td>3</td>
 </tr>
@@ -25,6 +27,7 @@ needs to reach the form:<br/>
 <tr>
   <td>7</td> <td>8</td> <td>0</td>
 </tr>
+</table>
 
 * **Solution** <br/>
 This C implementation uses A* search to solve this problem using as heuristic the sum of the manhattan distance of all non-empty pieces from the blocks to their estimated goal positions.
