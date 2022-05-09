@@ -23,7 +23,7 @@ needs to reach the form:<br/>
     <td>4</td> <td>5</td> <td>6</td>
   </tr>
   <tr>
-    <td>7</td> <td>8</td> <td>0</td>
+    <td>7</td> <td>8</td> <td></td>
   </tr>
 </table>
 
