@@ -16,6 +16,7 @@ typedef struct puzzleState
     struct puzzleState* prev_puzzle;
     point* empty_space;
     char came_from;
+    int h, g;
 }
 puzzleState;
 

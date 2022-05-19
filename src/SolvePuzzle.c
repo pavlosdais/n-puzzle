@@ -3,52 +3,65 @@
 #include <stdbool.h>
 #include "../include/item.h"
 #include "../include/utilities.h"
-#include "../include/PriorityQueue.h"
 #include "../include/stack.h"
+#include "../include/pq.h"
 
 #define ABS(A, B) ((A > B)? (A-B): (B-A))
 
 // Function Prototypes
-void explore_neighbours(PriorityQueue* Q, Stack* explored_states, puzzlePointer puzzle, int n, int old_g, int old_h);
+void explore_neighbours(PQueue Q, Stack* explored_states, puzzlePointer puzzle, int n);
 int heuristicEval(State puzzle, int n);
 int heuristicEvalFix(int old_h, puzzlePointer old_puzzle, puzzlePointer new_puzzle, int n);
 bool isEndState(State puzzle, int n);
-void DestroyPuzzle(puzzlePointer A, int n);
+void DestroyPuzzle(Pointer A, int n);
 puzzlePointer createPuzzle(int n, puzzlePointer prev_puzzle);
 puzzlePointer copyPuzzle(puzzlePointer puzzle, int n);
+
+int compareStates(Pointer a, Pointer b)
+{
+    puzzlePointer a1 = a;
+    puzzlePointer a2 = b;
+    
+    int f1 = a1->g + a1->h;
+    int f2 = a2->g + a2->h;
+    return f2-f1;
+}
 
 void AstarSearch(puzzlePointer puzzle, int n)
 {
     // Puzzle is solvable, start the search
     int g = 0, h;
 
-    PriorityQueue Q;
-    QueueInit(&Q);
-    Enqueue(&Q, puzzle, g, heuristicEval(PuzzleForm(puzzle), n));  // calculate h only for the first state, then keep updating it
+    PQueue Q;
+    pq_init(&Q, compareStates, DestroyPuzzle);
+    puzzle->g = 0;
+    puzzle->h = heuristicEval(PuzzleForm(puzzle), n);
+    pq_insert(Q, puzzle);
 
     // Use a stack to store all the puzzle states checked and not found to be in the terminal state
     Stack explored_states;
     StackInit(&explored_states);
 
-    while(!IsEmpty(Q))
+    while(pq_size(Q) > 0)
     {
-        puzzlePointer p = Dequeue(&Q, &g, &h);
+        puzzlePointer p = pq_remove(Q);
+
         if (isEndState(PuzzleForm(p), n))  // Puzzle is solved
         {
-            if (g == 0) printf("\nPuzzle already solved");
-            else if (g == 1) printf("\nSolved in 1 move");
-            else printf("\nSolved in %d moves", g);
+            if (p->g == 0) printf("\nPuzzle already solved");
+            else if (p->g == 1) printf("\nSolved in 1 move");
+            else printf("\nSolved in %d moves", p->g);
             printSequence(p, n);
             DestroyPuzzle(p, n);
             break;
         }
-        explore_neighbours(&Q, &explored_states, p, n, g, h);
+        explore_neighbours(Q, &explored_states, p, n);
     }
     DestroyStack(explored_states, n);
-    DestroyPQueue(Q, n);
+    pq_destroy(Q, n);
 }
 
-void explore_neighbours(PriorityQueue* Q, Stack* explored_states, puzzlePointer puzzle, int n, int old_g, int old_h)
+void explore_neighbours(PQueue Q, Stack* explored_states, puzzlePointer puzzle, int n)
 {
     // Save the previous puzzle before exploring the puzzles that can be created
     Push(explored_states, puzzle);
@@ -85,7 +98,9 @@ void explore_neighbours(PriorityQueue* Q, Stack* explored_states, puzzlePointer 
         new_puzzle->empty_space->y = cc;
 
         new_puzzle->came_from = dir[i];
-        Enqueue(Q, new_puzzle, old_g+1, heuristicEvalFix(old_h, puzzle, new_puzzle, n));
+        new_puzzle->g = puzzle->g+1;
+        new_puzzle->h = heuristicEvalFix(puzzle->h, puzzle, new_puzzle, n);
+        pq_insert(Q, new_puzzle);
     }
 }
 
@@ -186,15 +201,16 @@ bool readArray(puzzlePointer newPuz, int n)
     return true;
 }
 
-void DestroyPuzzle(puzzlePointer A, int n)
+void DestroyPuzzle(Pointer A, int n)
 {
-    if (A == NULL) return;
+    puzzlePointer A1 = A;
+    if (A1 == NULL) return;
     for (int i = 0; i < n; i++)
-        free(A->puzzle[i]);
+        free(A1->puzzle[i]);
     
-    free(A->puzzle);
-    free(A->empty_space);
-    free(A);
+    free(A1->puzzle);
+    free(A1->empty_space);
+    free(A1);
 }
 
 puzzlePointer copyPuzzle(puzzlePointer puzzle, int n)
