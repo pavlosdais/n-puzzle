@@ -42,7 +42,7 @@ void AstarSearch(puzzlePointer puzzle, int n)
     Stack explored_states;
     StackInit(&explored_states);
 
-    while(pq_size(Q) > 0)
+    while(!is_pq_empty(Q))
     {
         puzzlePointer p = pq_remove(Q);
 
@@ -57,6 +57,8 @@ void AstarSearch(puzzlePointer puzzle, int n)
         }
         explore_neighbours(Q, &explored_states, p, n);
     }
+
+    // destroy the searched states
     DestroyStack(explored_states, n);
     pq_destroy(Q, n);
 }

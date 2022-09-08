@@ -1,7 +1,9 @@
+#pragma once  // include at most once
+
 #include <stdbool.h>
 
 // heap's minimum starting size
-#define MIN_SIZE 4000
+#define MIN_SIZE 10000
 
 typedef void* Pointer;
 
@@ -16,20 +18,26 @@ typedef int (*CompareFunc)(Pointer a, Pointer b);
 // Pointer to function that destroys an element value
 typedef void (*DestroyFunc)(Pointer value, int n);
 
-// initialize priority queue
-void pq_init(PQueue* PQ, CompareFunc compare, DestroyFunc destroy);
+// initializes priority queue
+void pq_init(PQueue*, CompareFunc, DestroyFunc);
 
-// return the size of the priority queue
-unsigned int pq_size(PQueue PQ);
+// inserts value at the priority queue
+void pq_insert(PQueue, Pointer value);
 
-// insert value at the priority queue
-void pq_insert(PQueue PQ, Pointer value);
-
-// return the element with the highest priority as given by the compare function
+// returns the element with the highest priority as given by the compare function
 // or NULL if it's empty
 // it's important to note that once removed, the element is not destroyed by the
 // the destroy function (pq_destroy)
-Pointer pq_remove(PQueue PQ);
+Pointer pq_remove(PQueue);
 
-// destroy memory used by the priority queue
+// returns the size of the priority queue
+unsigned int pq_size(PQueue);
+
+// returns true if the priority queue is empty, false otherwise
+bool is_pq_empty(PQueue);
+
+// changes the destroy function and returns the old one
+DestroyFunc pq_set_destroy(PQueue, DestroyFunc);
+
+// destroys memory used by the priority queue
 void pq_destroy(PQueue PQ, int n);
