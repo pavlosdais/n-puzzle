@@ -2,7 +2,7 @@
 Play the game [here](https://www.artbylogic.com/puzzles/numSlider/numberShuffle.htm)
 ## **Gameplay**<br/>
 The [n-puzzle](https://en.wikipedia.org/wiki/15_puzzle) (most popularly known for the 8-puzzle problem or 15-puzzle problem) problem is a problem where we have at our disposal a k x k board with k*k-1(=n) numerated tiles and an empty spot. A tile adjacent to the empty piece can be moved to this position. The acceptable moves are up, down, left, right. The goal is, starting from a given board to reach a given board where all the titles starting from the top left are sorted in ascending order. <br/>
-For example, the puzzle <br/>
+For example, the 8-puzzle <br/>
 <table>
   <tr>
   <td>8</td> <td> </td> <td>6</td>
@@ -43,4 +43,4 @@ This C implementation uses A* search to solve this problem using as heuristic th
 - If the generation of the puzzle is successful, we fix the heuristic calculation of the new puzzle by adding the manhattan distance of the old empty, now occupied, piece and removing the manhattan distance of the now empty piece (once occupied by the old puzzle) to the manhattan distance of the old puzzle.
 
 # Examples
-An example for sizes 3(8-puzzle), 4(15-puzzle), 5(24-puzzle) and 6(35-puzzle) are included at the directory `examples`. Configure the size at the `makefile` and run `make example` to run.
+An example for sizes 3(8-puzzle), 4(15-puzzle), 5(24-puzzle) and 6(35-puzzle) is included at the directory `examples`. Configure the preferred size (by default 4) at the `makefile` and run `make example` for it to be solved.
