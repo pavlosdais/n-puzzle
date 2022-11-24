@@ -63,15 +63,10 @@ void pq_insert(PQueue PQ, Pointer value)
     // heap is full, double its size
     if (PQ->curr_size == PQ->capacity)
     {
-        node new_arr = realloc(PQ->arr, 2*PQ->capacity * sizeof(*new_arr));
-        assert(new_arr != NULL);  // allocation failure
-        
-        uint old_size = PQ->curr_size;
         PQ->capacity *= 2;
-        
-        PQ->arr = new_arr;
-        for (uint i = old_size; i < PQ->capacity; i++)
-            PQ->arr[i].data = NULL;
+
+        PQ->arr = realloc(PQ->arr, 2*PQ->capacity * sizeof(*(PQ->arr)));
+        assert(PQ->arr != NULL);  // allocation failure
     }
 
     PQ->arr[PQ->curr_size].data = value;
@@ -97,7 +92,7 @@ Pointer pq_remove(PQueue PQ)
         return NULL;
     
     // save the element with the highest priority (which is at the root) and mark it as removed by making it NULL
-    Pointer hp = PQ->arr[ROOT].data;
+    Pointer top_element = PQ->arr[ROOT].data;
     PQ->arr[ROOT].data = NULL;
     
     // root and far right leaf swap
@@ -107,7 +102,7 @@ Pointer pq_remove(PQueue PQ)
 
     bubble_down(PQ, ROOT);
     
-    return hp;
+    return top_element;
 }
 
 static void bubble_down(PQueue PQ, uint node)
@@ -148,7 +143,7 @@ void pq_destroy(PQueue PQ, int n)
     // if a destroy function was given
     if (PQ->destroy != NULL)
     {
-        for (uint i = 0; i < PQ->capacity; i++)
+        for (uint i = 0, pq_size = PQ->curr_size+1; i < pq_size; i++)
         {
             // if the element has not already been removed before, destroy it
             if (PQ->arr[i].data != NULL)
