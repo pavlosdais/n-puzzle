@@ -52,14 +52,19 @@ play:
 	./$(EXECUTABLE)
 
 # Example demo
-EXAMPLE = 4
+EXAMPLE = 5
 example: $(EXECUTABLE)
 	./$(EXECUTABLE) < examples/example$(EXAMPLE).txt
 
-# Clear files used for the program
+# Clear files used by the program
 clear:
 	rm -rf $(OBJ_DIR) $(BIN_DIR)
 
 # Use valgrind - Output is saved at bin/valgrind.log
 help: $(EXECUTABLE)
 	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=./bin/valgrind.log ./$(EXECUTABLE)
+
+# Final build // use optimization flags
+final: CFLAGS = -Ofast
+final: LDFLAGS = 
+final: all
