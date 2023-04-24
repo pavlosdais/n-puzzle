@@ -1,7 +1,9 @@
+#pragma once
 #include "item.h"
+#include "utilities.h"
+
 typedef struct StackNode* Stack;
-typedef struct puzzleState puzzleState;
-typedef puzzleState* puzzlePointer;
+
 
 void StackInit(Stack* S);
 void Push(Stack* S, puzzlePointer puzzle);

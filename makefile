@@ -1,47 +1,65 @@
-SRC_DIR = ./src
-MOD_DIR = ./modules
-
-OBJ = $(SRC_DIR)/main.o \
-	  $(SRC_DIR)/utilities.o \
-	  $(SRC_DIR)/SolvePuzzle.o \
-	  $(MOD_DIR)/stack.o \
-	  $(MOD_DIR)/pq.o
-
-EXEC = npuzzle
+# Compiler settings
 CC = gcc
+CFLAGS = -Wall -Wextra -Werror -g
+LDFLAGS =
 
-# make the executable file
-npuzzle: $(OBJ)
-	$(CC) -o $(EXEC) $(OBJ) -ggdb3
+# Directories
+SRC_DIR = src
+MODULES_DIR = modules
+OBJ_DIR = obj
+BIN_DIR = bin
 
-# make the object files needed
-main.o: $(SRC_DIR)/main.c
-	$(CC) -c $(SRC_DIR)/main.c -ggdb3
+# Source files
+SRC_FILES = $(wildcard $(SRC_DIR)/*.c)
+MODULES_FILES = $(wildcard $(MODULES_DIR)/*.c)
 
-utilities.o: $(SRC_DIR)/utilities.c
-	$(CC) -c $(SRC_DIR)/utilities.c -ggdb3
+# Object files
+OBJ_FILES = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRC_FILES)) \
+            $(patsubst $(MODULES_DIR)/%.c, $(OBJ_DIR)/%.o, $(MODULES_FILES))
 
-SolvePuzzle.o: $(SRC_DIR)/SolvePuzzle.c
-	$(CC) -c $(SRC_DIR)/SolvePuzzle.c -ggdb3
+# Executable program
+EXECUTABLE_NAME = npuzzle
+EXECUTABLE = $(BIN_DIR)/$(EXECUTABLE_NAME)
 
-stack.o: $(MOD_DIR)/stack.c
-	$(CC) -c $(MOD_DIR)/stack.c -ggdb3
+# OS
+OS := LIN
+ifeq ($(OS), WIN)
+	CC = x86_64-w64-mingw32-gcc
+	EXECUTABLE = $(BIN_DIR)/$(EXECUTABLE_NAME).exe
+endif
 
-pq.o: $(MOD_DIR)/pq.c
-	$(CC) -c $(MOD_DIR)/pq.c -ggdb3
+all: $(EXECUTABLE)
 
-# play the game
-play: $(EXEC)
-	./npuzzle
+# Targets
+.PHONY: all clean valgrind
 
-# run example
+# Create the executable program
+$(EXECUTABLE): $(OBJ_FILES)
+	@mkdir -p $(BIN_DIR)
+	$(CC) $(LDFLAGS) $^ -o $@
+
+# Compile
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR)/%.o: $(MODULES_DIR)/%.c
+	@mkdir -p $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+# Play the game
+play:
+	./$(EXECUTABLE)
+
+# Example demo
 EXAMPLE = 4
-example: $(EXEC)
-	./npuzzle < examples/example$(EXAMPLE).txt
+example: $(EXECUTABLE)
+	./$(EXECUTABLE) < examples/example$(EXAMPLE).txt
 
-help: $(EXEC)
-	valgrind --leak-check=full -v --show-leak-kinds=all --track-origins=yes ./npuzzle
-
-# delete excess object files
+# Clear files used for the program
 clear:
-	rm -f $(OBJ)
+	rm -rf $(OBJ_DIR) $(BIN_DIR)
+
+# Use valgrind - Output is saved at bin/valgrind.log
+help: $(EXECUTABLE)
+	valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes --verbose --log-file=./bin/valgrind.log ./$(EXECUTABLE)
